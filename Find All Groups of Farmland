@@ -1,0 +1,52 @@
+
+class Solution {
+    public void DFS(int[][] land,int[] arr,int[][] visited,int i,int j)
+    {
+        if(i>=land.length || j>=land[0].length || visited[i][j]==1 || land[i][j]==0)
+           return ;
+        // mark current cell as visited
+        visited[i][j]=1;
+
+        // update group array 
+
+        arr[2]=Math.max(arr[2],i);
+        arr[3]=Math.max(arr[3],j);
+
+        // Visit the neighbour cells 
+
+        DFS(land,arr,visited,i+1,j);
+        DFS(land,arr,visited,i,j+1);
+
+        
+
+    }
+    public int[][] findFarmland(int[][] land) {
+        List<int[]> res=new ArrayList<>();
+        int n=land.length;
+        int m=land[0].length;
+        int[][] visited=new int[n][m];
+
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                // if the cell is a land  and not visited then call DFS  
+
+                if(land[i][j]==1 && visited[i][j]==0)
+                {
+                    int[] arr={i,j,0,0};
+                    DFS(land,arr,visited,i,j);
+                    res.add(arr);
+                }
+            }
+        }
+
+        // convert list to arr 
+
+        return res.toArray(new int[0][]);
+        
+
+        
+        
+    }
+}
