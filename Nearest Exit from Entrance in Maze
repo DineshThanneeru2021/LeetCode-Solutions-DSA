@@ -1,0 +1,87 @@
+/*
+Input: maze = [["+","+",".","+"],[".",".",".","+"],["+","+","+","."]], entrance = [1,2]
+Output: 1
+Explanation: There are 3 exits in this maze at [1,0], [0,2], and [2,3].
+Initially, you are at the entrance cell [1,2].
+- You can reach [1,0] by moving 2 steps left.
+- You can reach [0,2] by moving 1 step up.
+It is impossible to reach [2,3] from the entrance.
+Thus, the nearest exit is [0,2], which is 1 step away.
+
+*/
+
+
+class Pair{
+    int row;
+    int col;
+    int steps;
+    Pair(int row,int col,int steps)
+    {
+        this.row=row;
+        this.col=col;
+        this.steps=steps;
+    }
+}
+
+class Solution {
+    public int nearestExit(char[][] maze, int[] entrance) {
+        Queue<Pair> que=new LinkedList<>();
+        que.add(new Pair(entrance[0],entrance[1],0));
+        int[] drow={-1,0,+1,0};
+        int[] dcol={0,-1,0,+1};
+        int n=maze.length;
+        int m=maze[0].length;
+        int[][] vis=new int[n][m];
+
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(maze[i][j]=='+')
+                 vis[i][j]=1;
+                else
+                 vis[i][j]=0;
+            }
+        }
+        int flag=0;
+        int ans=-1;
+
+        while(que.size()>0)
+        {
+            int row=que.peek().row;
+            int col=que.peek().col;
+            int steps=que.peek().steps;
+
+            // remove peek in que 
+
+            que.remove();
+            vis[row][col]=1;
+            for(int i=0;i<4;i++)
+            {
+                int nrow=drow[i]+row;
+                int ncol=dcol[i]+col;
+                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && vis[nrow][ncol]==0)
+                {
+                    vis[nrow][ncol]=1;
+                    que.add(new Pair(nrow,ncol,steps+1));
+                    if(nrow==0 || nrow==n-1 || ncol==0 || ncol==m-1)
+                    {
+                        flag=1;
+                        ans=steps+1;
+                        break;
+
+                    }
+                }
+            }
+            if(flag==1)
+             break;
+            
+
+
+        }
+        return ans;
+
+        //return -1;
+        
+    }
+}
